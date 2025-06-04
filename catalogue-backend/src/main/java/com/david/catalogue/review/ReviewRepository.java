@@ -9,5 +9,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Iterable<Review> findByBookId(long id);
     Iterable<Review> findByBookIsbnNumber(String isbnNumber);
     Iterable<Review> findByUser(User user);
-    }
+    void deleteAllByBookIsbnNumber(String isbnNumber);
+}
 

@@ -1,5 +1,6 @@
 package com.david.catalogue.book;
 
+import com.david.catalogue.review.ReviewRepository;
 import com.david.catalogue.user.User;
 import com.david.catalogue.user.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -19,10 +20,12 @@ import java.util.UUID;
 public class BookController {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
 
-    public BookController(BookRepository bookRepository, UserRepository userRepository) {
+    public BookController(BookRepository bookRepository, UserRepository userRepository, ReviewRepository reviewRepository) {
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
+        this.reviewRepository = reviewRepository;
     }
 
 //    @GetMapping("/{id}")
@@ -97,6 +100,7 @@ public class BookController {
     @DeleteMapping("/{isbnNumber}")
     public ResponseEntity<Void> delete(@PathVariable String isbnNumber) {
         if (bookRepository.findByIsbnNumber(isbnNumber).isPresent()) {
+            reviewRepository.deleteAllByBookIsbnNumber(isbnNumber);
             bookRepository.deleteByIsbnNumber(isbnNumber);
             return ResponseEntity.noContent().build();
         } else return ResponseEntity.notFound().build();

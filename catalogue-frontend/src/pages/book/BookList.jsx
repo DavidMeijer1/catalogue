@@ -26,35 +26,34 @@ function BookList() {
     };
 
     fetchData();
-  }, [setBookList]);
+  }, [setBookList, user.accessToken]);
 
   return (
     <>
       <Header />
-      <h1 className="h-40 text-gray-100 text-5xl">My books</h1>
+      <div className="py-20">
+      <h1 className="h-10rem text-gray-100 text-5xl left-20 ">My books</h1>
 
       <div className="w-full flex flex-col space-y-4 items-center">
         {bookList.map((book) => (
-          <>
-            <Link
-              key={book.id}
-              to={"/books/" + book.isbnNumber}
-              className="w-full flex justify-center"
-            >
-              <article className="w-8/12 h-20 md:mx-4 flex flex-row justify-between items-center bg-white rounded-lg shadow-lg p-4 border-gray-200 transition-transform transform duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 text-gray-900">
-                <div className="flex items-center md:w-48">
-                  <p>{book.author}</p>
-                </div>
-                <div className="md-flex">
-                  {" "}
-                  <p>{book.title}</p>
-                </div>
-                <div>
-                  <p>{book.publicationYear}</p>
-                </div>
-              </article>
-            </Link>
-          </>
+          <Link
+            key={book.id}
+            to={"/books/" + book.isbnNumber}
+            className="w-full flex justify-center"
+          >
+            <article className="w-8/12 h-20 md:mx-4 flex flex-row justify-between items-center bg-white rounded-lg shadow-lg p-4 border-gray-200 transition-transform transform duration-300 ease-in-out hover:scale-110 hover:bg-gray-100 text-gray-900">
+              <div className="flex items-center md:w-48">
+                <p>{book.author}</p>
+              </div>
+              <div className="md-flex">
+                {" "}
+                <p>{book.title}</p>
+              </div>
+              <div>
+                <p>{book.publicationYear}</p>
+              </div>
+            </article>
+          </Link>
         ))}
       </div>
       <BookForm
@@ -63,6 +62,7 @@ function BookList() {
         setNewBook={setNewBook}
         setBookList={setBookList}
       />
+      </div>
     </>
   );
 }

@@ -39,7 +39,7 @@ public class Seeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        saveUser();
+//        saveUser();
         var example = User.builder()
                 .username("Robert")
                 .password("password")

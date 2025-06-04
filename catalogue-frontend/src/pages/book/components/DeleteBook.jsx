@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function DeleteBook({isbn}) {
+function DeleteBook({ isbn }) {
   const [bookList, setBookList] = useState([]);
   const navigate = useNavigate();
 
@@ -18,14 +18,10 @@ function DeleteBook({isbn}) {
     };
 
     fetchData();
-  }, [setBookList]);
+  }, []);
 
   async function deleteBook(isbn) {
     try {
-      setBookList((bookList) =>
-        bookList.filter((book) => book.isbnNumber !== isbn)
-      );
-
       const response = await fetch(
         `http://localhost:8080/api/v1/books/${isbn}`,
         {
@@ -33,9 +29,11 @@ function DeleteBook({isbn}) {
         }
       );
       if (response.status === HttpStatusCode.NoContent) {
-        console.log(
-          `You have deleted the book with ISBN number ${isbn}.`
+        setBookList((bookList) =>
+          bookList.filter((book) => book.isbnNumber !== isbn)
         );
+
+        console.log(`You have deleted the book with ISBN number ${isbn}.`);
         alert(`You have deleted the book.`);
         navigate(-1);
       } else {
@@ -45,16 +43,19 @@ function DeleteBook({isbn}) {
         );
         const errorData = await response.json();
         console.error("See the details here:", errorData);
-        setBookList((bookList) => [...bookList, { isbn }]);
+        alert("Failed to delete the book.");
       }
     } catch (error) {
       console.log("The computer gives this error:", error);
+      alert("An error occurred. Pleaase try again.");
     }
   }
 
   return (
     <>
-      <button onClick={() => deleteBook(isbn)}>Remove the book from your list</button>
+      <button onClick={() => deleteBook(isbn)}>
+        Remove the book from your list
+      </button>
     </>
   );
 }

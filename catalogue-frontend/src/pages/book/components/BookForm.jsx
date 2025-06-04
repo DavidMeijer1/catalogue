@@ -7,9 +7,16 @@ function BookForm({ newBook, bookList, setNewBook, setBookList }) {
   const { getUser } = useAuth();
   const user = getUser();
 
+  async function validateIsbn(isbnNumber) {
+    const response = await fetch(
+      `https://openlibrary.org/api/books?bibkeys=ISBN:${isbnNumber}&format=json&jscmd=data`
+    );
+    const data = await response.json();
+    return data[`ISBN:${isbnNumber}`] !== undefined; // Check if the book exists
+  }
+
   function onSubmit(event) {
     console.log("User details:", user);
-
     event.preventDefault();
     const isbnNumber = newBook.isbnNumber;
     if (isbnNumber.length === 10 || isbnNumber.length === 13) {
@@ -23,6 +30,13 @@ function BookForm({ newBook, bookList, setNewBook, setBookList }) {
   }
 
   async function addBook() {
+    const isValidIsbn = await validateIsbn(isbnNumber);
+    if (!isValidIsbn) {
+      alert(
+        "The ISBN number is not valid or does not exist in the Open Library."
+      );
+      return;
+    }
     try {
       const bookWithUser = {
         ...newBook,
@@ -32,8 +46,8 @@ function BookForm({ newBook, bookList, setNewBook, setBookList }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${user.accessToken}`, 
-      },
+          Authorization: `Bearer ${user.accessToken}`,
+        },
         body: JSON.stringify(bookWithUser),
       });
       if (response.status === HttpStatusCode.Created) {

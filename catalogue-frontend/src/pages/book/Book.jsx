@@ -4,10 +4,10 @@ import { useState, useEffect } from "react";
 import Header from "../../components/header/Header";
 import ReviewList from "./components/ReviewList";
 import DeleteBook from "./components/DeleteBook";
+import { emptyForms } from "../../api/Forms";
 
 function Book() {
-  const [book, setBook] = useState([]);
-  const [bookFromDatabase, setBookFromDatabase] = useState([]);
+  const [book, setBook] = useState(emptyForms.newBook);
   const { isbn } = useParams();
 
   const HttpStatusCode = {
@@ -22,22 +22,13 @@ function Book() {
       );
       const data = await reponse.json();
 
-      setBook(data.docs[0]);
+      if (data.docs && data.docs.length > 0) {
+        setBook(data.docs[0]);
+      } else {
+        setBook(null); // Set to null if no book found
+      }
     };
     fetchBook();
-  }, [isbn]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(
-        `http://localhost:8080/api/v1/books/${isbn}`,
-      );
-      const result = await response.json();
-      console.log(result);
-      setBookFromDatabase(result);
-    };
-
-    fetchData();
   }, [isbn]);
 
   return (
@@ -76,14 +67,11 @@ function Book() {
               className="w-64 h-96 object-cover rounded-lg shadow-lg"
             />
           </div>
-
-          <div>{bookFromDatabase.id}</div>
         </div>
       </div>
-      {/* <button onClick={() => deleteBook(isbn)} >Remove the book from your list</button> */}
 
       <div>
-        <ReviewList isbn={isbn} id={bookFromDatabase.id}/>
+        <ReviewList isbn={isbn} />
         <DeleteBook isbn={isbn} />
       </div>
     </div>

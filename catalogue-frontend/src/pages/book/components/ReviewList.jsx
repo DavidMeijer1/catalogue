@@ -30,7 +30,7 @@ function ReviewList({ isbn }) {
       }
     };
     fetchReviews();
-  }, [isbn]);
+  }, [isbn, user.accessToken]);
 
   return (
     <div>
@@ -38,17 +38,15 @@ function ReviewList({ isbn }) {
         <p>No reviews available.</p>
       ) : (
         reviews.map((review) => (
-          <>
-            <div key={review.id} className="">
-              <article>
-                {console.log(review, review.id)}
-                <p>User: {review.user.username}</p>
-                <p>Text: {review.text}</p>
-                <p>Date: {review.dateTimePosted}</p>
-              </article>
-              <DeleteReview setReviews={setReviews} reviewId={review.id} />
-            </div>
-          </>
+          <div key={review.id} className="">
+            <article>
+              {console.log(review, review.id)}
+              <p>User: {review.user.username}</p>
+              <p>Text: {review.text}</p>
+              <p>Date: {review.dateTimePosted}</p>
+            </article>
+            <DeleteReview setReviews={setReviews} id={review.id}/>
+          </div>
         ))
       )}
 
