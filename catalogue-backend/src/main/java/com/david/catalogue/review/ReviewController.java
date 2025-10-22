@@ -5,7 +5,6 @@ import com.david.catalogue.book.BookRepository;
 import com.david.catalogue.user.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -37,16 +36,6 @@ public class ReviewController {
     public Iterable<Review> getMyreviews(@AuthenticationPrincipal User currentUser){
         return reviewRepository.findByUser(currentUser);
     }
-
-
-//    @GetMapping("/reviews/{id}")
-//    public ResponseEntity<Set<Review>> getReviews(@PathVariable long id) {
-//        Optional<Book> possibleBook = bookRepository.findById(id);
-//        if (possibleBook.isEmpty()) return ResponseEntity.notFound().build();
-//        var book = possibleBook.get();
-//        var reviews = book.getReviews();
-//        return ResponseEntity.ok(reviews);
-//    }
 
     @PostMapping("/{isbn}")
     public ResponseEntity<?> addReview(@PathVariable String isbn, @AuthenticationPrincipal User currentUser, @RequestBody ReviewDTO reviewDTO, UriComponentsBuilder ucb){

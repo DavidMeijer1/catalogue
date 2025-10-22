@@ -8,6 +8,7 @@ import { emptyForms } from "../../api/Forms";
 
 function Book() {
   const [book, setBook] = useState(emptyForms.newBook);
+  const [user, setUser] = useState(null);
   const { isbn } = useParams();
 
   const HttpStatusCode = {
@@ -28,11 +29,25 @@ function Book() {
         setBook(null); // Set to null if no book found
       }
     };
+
+    const fetchUserDetails = async () => {
+      const response = await fetch(
+        `http://localhost:8080/api/v1/books/${isbn}`
+      );
+      const data = await response.json();
+      if (data && data.user) {
+        setUser(data.user);
+      } else {
+        setUser(null);
+      }
+    };
+
+    fetchUserDetails();
     fetchBook();
   }, [isbn]);
 
   return (
-    <div className="">
+    <div className="mt-20">
       <Header />
 
       <div className="flex flex-col md:flex-row items-center justify-center bg-slate-50 p-8">
@@ -58,6 +73,10 @@ function Book() {
 
           <div className="text-gray-700 mb-4">
             International Standard Book Number (ISBN): {isbn}
+          </div>
+
+          <div className="text-gray-700 mb-4">
+            Added by: {user ? user.username : "Unknown"}
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-lg">

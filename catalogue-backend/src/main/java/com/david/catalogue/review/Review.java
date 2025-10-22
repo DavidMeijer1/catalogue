@@ -2,8 +2,6 @@ package com.david.catalogue.review;
 
 import com.david.catalogue.book.Book;
 import com.david.catalogue.user.User;
-import com.fasterxml.jackson.annotation.JacksonAnnotation;
-import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;

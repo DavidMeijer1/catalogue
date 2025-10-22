@@ -23,6 +23,5 @@ public class AccountRequest {
     private Long id;
     @NonNull
     private String username;
-//    @Column(columnDefinition = "TIMESTAMP(0)")
-//    private LocalDateTime dateRequested;
+    private String password;
 }

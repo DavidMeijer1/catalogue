@@ -9,7 +9,6 @@ import java.util.Optional;
 @Service
 public class UserServiceImplementation implements UserService {
     private final UserRepository userRepository;
-
     @Override
     public Optional<User> getByUsername(String username) {
         return userRepository.findByUsername(username);

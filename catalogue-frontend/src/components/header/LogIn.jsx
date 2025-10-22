@@ -46,12 +46,17 @@ function LogIn() {
     }
   };
 
+  const handleLogout = () =>{
+    userLogout();
+    navigate("/");
+  }
+
   return (
     <div className="login-container">
       {userIsAuthenticated() ? (
         <>
           <p>Welcome,<Link to="/userprofile"> {getUsername()} </Link>!</p>
-          <button onClick={userLogout} className="logout-button">
+          <button onClick={handleLogout} className="logout-button">
             Log Out
           </button>
         </>

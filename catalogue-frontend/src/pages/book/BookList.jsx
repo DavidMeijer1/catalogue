@@ -31,8 +31,8 @@ function BookList() {
   return (
     <>
       <Header />
-      <div className="py-20">
-      <h1 className="h-10rem text-gray-100 text-5xl left-20 ">My books</h1>
+      <div className="">
+      <h1 className="mt-20 h-20 text-gray-100 text-5xl left-20 ">All books</h1>
 
       <div className="w-full flex flex-col space-y-4 items-center">
         {bookList.map((book) => (

@@ -2,18 +2,14 @@ package com.david.catalogue.book;
 
 import com.david.catalogue.review.Review;
 import com.david.catalogue.user.User;
-import com.fasterxml.jackson.annotation.JacksonInject;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.extern.jackson.Jacksonized;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 public class Book {
-
     @JsonManagedReference
     @OneToMany(mappedBy = "book")
     private final Set<Review> reviews = new HashSet<>();
@@ -79,7 +75,6 @@ public class Book {
     public Set<Review> getReviews() {
         return reviews;
     }
-
 
     public User getUser() {
         return user;

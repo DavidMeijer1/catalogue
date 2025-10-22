@@ -1,11 +1,10 @@
 package com.david.catalogue.user;
 
-import com.david.catalogue.book.Book;
 import com.david.catalogue.user.userRequests.AccountRequestRepository;
-import com.fasterxml.jackson.annotation.JsonView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 @RestController
@@ -45,23 +43,6 @@ public class UserController {
         }
     }
 
-    @PatchMapping("/update/username")
-    public ResponseEntity<User> patchUsername(@Validated @RequestBody String newUsername,
-                                              @AuthenticationPrincipal User currentUser) {
-        if (newUsername.isBlank()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        try {
-            currentUser.setUsername(newUsername);
-            return new ResponseEntity<>(userRepository.save(currentUser), HttpStatus.OK);
-        } catch (DataIntegrityViolationException e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-    }
-
     @PostMapping("/new/{id}")
     public ResponseEntity<User> createNewUser(@PathVariable("id") Long accountRequestId,
                                               @RequestHeader(name = "ROLE", defaultValue = "USER") String role) {
@@ -86,9 +67,37 @@ public class UserController {
         }
     }
 
+    @PatchMapping("/update")
+    public ResponseEntity<String> patchUsername(@Validated @RequestBody UpdateUserRequestDTO request,
+                                              @AuthenticationPrincipal User currentUser) {
+        if (currentUser == null) {
+            return new ResponseEntity<>("User not authenticated", HttpStatus.UNAUTHORIZED);
+        }
+
+        String newPassword = request.getNewPassword();
+        if(newPassword == null || newPassword.isBlank()){
+            return new ResponseEntity<>("Please provide a password", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            currentUser.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(currentUser);
+            return new ResponseEntity<>("You have successfully updated the password.", HttpStatus.OK);
+        } catch (DataIntegrityViolationException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteUser(@PathVariable long id){
-        userRepository.deleteAll();
-        return ResponseEntity.ok("Deleted");
+    public ResponseEntity<String> deleteUser(@PathVariable UUID uuid){
+        if(userRepository.existsById(uuid)){
+            userRepository.deleteById(uuid);
+            return ResponseEntity.ok("User deleted.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
     }
 }

@@ -13,12 +13,12 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`fixed top-0 left-0 h-full w-[200px] bg-gray-100 p-5 transition-all duration-300 ${
+      className={`fixed top-0 left-0 h-auto w-[200px] bg-gray-100 p-5 transition-all duration-300 ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
       <button
-        className="absolute top-2 right-[-40px] bg-blue-500 px-2 py-1 text-2xl"
+        className="absolute p-4 right-[-50px] bg-blue-500 px-2 py-1 text-2xl"
         onClick={toggleSidebar}
       >
         {isOpen ? "×" : "☰"}

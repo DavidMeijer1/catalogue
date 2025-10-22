@@ -85,7 +85,7 @@ public class User implements UserDetails {
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (userRole == null) {
+        if (userRole.getAuthorities().isEmpty()) {
             System.out.println("Returns an empty list.");
             return Collections.emptyList(); // Return an empty list if userRole is null
         }
@@ -107,10 +107,4 @@ public class User implements UserDetails {
     public void setReviews(Set<Review> reviews) {
         this.reviews = reviews;
     }
-
-
-    //    @Override
-//    public String getPassword() {
-//        return null;
-//    }
 }

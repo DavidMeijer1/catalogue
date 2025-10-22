@@ -30,6 +30,7 @@ function BookForm({ newBook, bookList, setNewBook, setBookList }) {
   }
 
   async function addBook() {
+    const isbnNumber = newBook.isbnNumber;
     const isValidIsbn = await validateIsbn(isbnNumber);
     if (!isValidIsbn) {
       alert(
@@ -51,7 +52,7 @@ function BookForm({ newBook, bookList, setNewBook, setBookList }) {
         body: JSON.stringify(bookWithUser),
       });
       if (response.status === HttpStatusCode.Created) {
-        setBookList((bookList) => [...bookList, newBook]);
+        setBookList((bookList) => [...bookList, bookWithUser]);
         setNewBook(emptyForms.newBook);
       } else {
         alert("A book with this ISBN already exists in your list.");

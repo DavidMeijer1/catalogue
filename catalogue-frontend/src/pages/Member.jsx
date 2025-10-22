@@ -11,7 +11,6 @@ function Member() {
     const fetchUser = async () => {
       const reponse = await fetch(`http://localhost:8080/api/v1/users/${id}`);
       const data = await reponse.json();
-      console.log(data);
       setUser(data);
     };
     fetchUser();

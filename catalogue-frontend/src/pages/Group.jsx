@@ -36,7 +36,7 @@ function Group() {
   return (
     <>
       <Header />
-      <h1 className="h-40 text-gray-100 text-5xl">My Members</h1>
+      <h1 className="mt-20 h-20 text-gray-100 text-5xl">My Members</h1>
 
       <div className="w-full flex flex-col space-y-4 items-center">
         {groupList.map((member) => (

@@ -13,7 +13,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/books")
@@ -27,12 +26,6 @@ public class BookController {
         this.userRepository = userRepository;
         this.reviewRepository = reviewRepository;
     }
-
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Book> getBookById(@PathVariable long id) {
-//        Optional<Book> possibleBook = bookRepository.findById(id);
-//        return possibleBook.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-//    }
 
     @GetMapping
     public Iterable<Book> getAllBooks() {
@@ -50,23 +43,15 @@ public class BookController {
         return bookRepository.findByUser(currentUser);
     }
 
-
     @GetMapping("/search/titles/{title}")
     public ResponseEntity<Book> findByTitle(@PathVariable String title) {
         Optional<Book> possibleBook = bookRepository.findByTitle(title);
         return possibleBook.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
-
     @PostMapping
     public ResponseEntity<?> addBook(@Validated @RequestBody BookDTO bookDTO, @AuthenticationPrincipal User currentUser, UriComponentsBuilder ucb) {
         try {
-//            if (book.getId() != null) {
-//                var problemDetail = org.springframework.http.ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
-//                        "Post request should not contain an id.");
-//                return ResponseEntity.badRequest().body(problemDetail);
-//            }
             if(bookRepository.findByIsbnNumber(bookDTO.isbnNumber).isPresent()){
                 return ResponseEntity.badRequest().build();
             }
